@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Cart</title>
+
+    <style>
+        @font-face {
+            font-family: 'DB Helvethaica X v3.2';
+            src: url('https://cdn.jsdelivr.net/gh/valPsd/hb-font/DB-Helvethaica-X-v3.2.ttf') format('truetype');
+            font-style: normal;
+        }
+
+        body {
+            font-family: "DB Helvethaica X v3.2", sans-serif;
+            font-size: 25px;
+        }
+
+        .checkoutButt {
+            border: none;
+            border-radius: 10px;
+            padding: 1%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="text-center">
+            <h1 style="margin-top: 3%;">รายการสินค้าที่สั่ง</h1>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">รายการ</th>
+                    <th scope="col">จำนวน</th>
+                    <th scope="col">หน่วย</th>
+                    <th scope="col">ราคา/หน่วย (บาท)</th>
+                    <th scope="col">ราคารวม</th>
+                </tr>
+            </thead>
+            <tbody id="allProducts">
+            </tbody>
+        </table>
+
+        <div>
+            <h3 style="text-align: end;" id="total">ราคารวมทั้งหมด: </h3>
+        </div>
+
+        <div class="text-center">
+            <button class="checkoutButt" onclick="goToCheckout()">เช็คเอ้าท์</button>
+        </div>
+    </div>
+
+    <script>
+        getData();
+
+        async function getData() {
+            const url = 'https://script.googleusercontent.com/macros/echo?user_content_key=s80ngn7jj0HJTkcNioMJzneAFRFZzN2C2GCVatQVN6p91Q3Ss9KokHVc6IQoSF1On6F1bKwHSLgCu9vmdUU8Vp1tryL01Sivm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnF287cpsU3rZAMEt19N4mdF9rHbn-JkyV0fMa1Q2IkrkdaKQULrGFFnkX7OpvJurLcsBCinZAgjmXCd38iVHNQfJ-cNJkhu4KNz9Jw9Md8uu&lib=MQ9v40zQe5cxq_jHQjlUBhdGJXg00Y1vj'
+            const response = await fetch(url);
+            let products = await response.json();
+
+            const url2 = 'https://script.googleusercontent.com/macros/echo?user_content_key=pYArAsCbpsqCtQyLYkQTvX_o6wdqtmppWyN7defoM6T8zQmSITNke1-dvXcAtwFk8z7ytocCXv20IpWU2SXaaHK0zDtlJ_UFm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnOrO_fMf5KF2Ms_kC--sNu6ngJzJnqttLM4nkT5Ki3Pz_9znWHSSWCwH2wk97rm16vRHM_7e24desN7dcFvc4sdion_Hr07p6w&lib=MhDxR0FoqUyqBnirO53q_yhwtdYaQ9ZEv'
+            const response2 = await fetch(url2);
+            let cart = await response2.json();
+            let carts = [];
+            for (const c of cart) {
+                if (carts.length == 0) {
+                    carts.push({
+                        'Name': c.Name,
+                        'Amount': c.Amount
+                    })
+                } else {
+                    let isFound = false;
+                    for (const cs of carts) {
+                        if (cs.Name == c.Name) {
+                            cs.Amount = parseInt(cs.Amount) + parseInt(c.Amount);
+                            isFound = true;
+                            break;
+                        }
+                    }
+                    if (!isFound) {
+                        carts.push({
+                            'Name': c.Name,
+                            'Amount': c.Amount
+                        })
+                    }
+                }
+            }
+
+            let html = '';
+            let num = 0;
+            let allTotal = 0;
+            for (const c of carts) {
+                num += 1;
+                let total = 0;
+                for (const p of products) {
+                    if (c.Name == p.Name) {
+                        total = p.Price * c.Amount;
+                        allTotal += total;
+                        html += `
+                            <tr>
+                                <td>${num}</td>
+                                <td>${c.Name}</td>
+                                <td>${c.Amount}</td>
+                                <td>${p.Unit}</td>
+                                <td>${p.Price}</td>
+                                <td>${p.Price}</td>
+                                <td>${total}</td>
+                            </tr>
+                        `;
+                        break;
+                    }
+                }
+            }
+            document.getElementById('allProducts').innerHTML = html;
+            document.getElementById('total').innerHTML = 'ราคารวมทั้งหมด: ' + allTotal + ' บาท';
+        }
+
+        function goToCheckout() {
+            location.href = 'checkout.html'
+        }
+    </script>
+</body>
+
+</html>

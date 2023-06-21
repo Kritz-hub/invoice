@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lora:400,700|Montserrat:300,400,700'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation-flex.min.css'>
+    <!-- <link rel="stylesheet" href="./style.css"> -->
+
+    <style>
+        @font-face {
+            font-family: 'DB Helvethaica X v3.2';
+            src: url('https://cdn.jsdelivr.net/gh/valPsd/hb-font/DB-Helvethaica-X-v3.2.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            width: 8.27in;
+            height: 11.69in;
+            position: absolute;
+            top: 0%;
+            left: 10%;
+            font-family: "DB Helvethaica X v3.2", sans-serif !important;
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        table.invoice {
+            background: #fff;
+        }
+
+        table.invoice .num {
+            font-weight: 200;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.8em;
+        }
+
+        table.invoice tr,
+        table.invoice td {
+            background: #fff;
+            text-align: left;
+            font-weight: 400;
+            color: #000000;
+        }
+
+        table.invoice tr.header td h2 {
+            text-align: center;
+            font-family: "DB Helvethaica X v3.2", sans-serif;
+            font-weight: 200;
+            font-size: 2rem;
+            color: #000000;
+        }
+
+        table.invoice tr.intro td:nth-child(2) {
+            text-align: right;
+        }
+
+        table.invoice tr.details>td {
+            padding-top: 1.5rem;
+            padding-bottom: 0;
+        }
+
+        table.invoice tr.details td.id,
+        table.invoice tr.details td.qty,
+        table.invoice tr.details td.sub,
+        table.invoice tr.details th.id,
+
+        table.invoice tr.details th.qty,
+        table.invoice tr.details th.sub {
+            text-align: center;
+        }
+
+        table.invoice tr.details td:last-child,
+        table.invoice tr.details th:last-child {
+            text-align: right;
+        }
+
+        table.invoice tr.details table thead,
+        table.invoice tr.details table tbody {
+            position: relative;
+        }
+
+        table.invoice tr.details table thead:after,
+        table.invoice tr.details table tbody:after {
+            content: "";
+            height: 1px;
+            position: absolute;
+            width: 100%;
+            left: 0;
+            margin-top: -1px;
+            background: #000000;
+        }
+
+        th.desc {
+            width: 300px;
+        }
+
+        table.invoice tr.totals td {
+            padding-top: 0;
+        }
+
+        table.invoice tr.totals table tr td {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        table.invoice tr.totals table tr td:nth-child(1) {
+            font-weight: 500;
+        }
+
+        table.invoice tr.totals table tr td:nth-child(2) {
+            text-align: right;
+            font-weight: 200;
+        }
+
+        table.invoice tr.totals table tr:nth-last-child(2) td {
+            padding-bottom: 0.5em;
+        }
+
+        table.invoice tr.totals table tr:nth-last-child(2) td:last-child {
+            position: relative;
+        }
+
+        table.invoice tr.totals table tr:nth-last-child(2) td:last-child:after {
+            content: "";
+            height: 4px;
+            width: 100%;
+            border-top: 1px solid #000000;
+            border-bottom: 1px solid #000000;
+            position: relative;
+            right: 0;
+            top: 0px;
+            bottom: -0.575rem;
+            display: block;
+        }
+
+        table.invoice tr.totals table tr.total td {
+            font-size: 1.2em;
+            padding-top: 0.5em;
+            font-weight: 700;
+        }
+
+        table.invoice tr.totals table tr.total td:last-child {
+            font-weight: 700;
+        }
+
+        .additional-info h5 {
+            font-size: 0.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #000000;
+        }
+
+        .txt p {
+            text-align: center;
+        }
+
+        .header img {
+            width: 150px;
+            height: 150px;
+        }
+
+        hr {
+            border-top: 1px solid black;
+        }
+
+        .note h2 {
+            color: red;
+            font-size: medium;
+            text-align: center;
+        }
+
+        .align-right p {
+            text-align: center;
+        }
+
+        .tts {
+            font: 1.5em "DB Helvethaica X v3.2", sans-serif;
+            font-weight: bold;
+        }
+
+        .infoCol {
+            width: 250px;
+            margin-bottom: 0px !important;
+        }
+
+        p {
+            margin-bottom: 0px !important;
+        }
+
+        .printButt {
+            margin-top: 10%;
+            margin-bottom: 5%;
+            margin-left: 35%;
+            font-size: 15px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                width: 100%;
+                height: auto;
+                position: static;
+                top: auto;
+                left: auto;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row expanded">
+        <main class="columns">
+            <div class="inner-container">
+                <section class="row">
+                    <div class="large invoice-container" id="invoice-container">
+                        <table class="invoice">
+                            <tr class="header">
+                                <td class="">
+                                    <img
+                                        src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/business-logo-design-template-78655edda18bc1196ab28760f1535baa_screen.jpg?ts=1617645324" />
+                                </td>
+                                <td class="align-right">
+                                    <br><br><br>
+                                    <h2>ใบเสนอราคา</h2>
+                                    <p>Quotation</p>
+                                    <hr style="
+              vertical-align: baseline;
+              width: auto;
+              border: none;
+              border-top: 1px solid black;
+              margin: 0;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p class="infoCol" id="addressBusiness">บริษัท จแแแ แแแแ จำกัด
+                                        1234 หมู่5 ต.แแแ อ.แแแ จ.แพร่ 1234</p>
+                                    <p class="infoCol" id="telBusiness">โทรศัพท์: 0</p>
+                                    <p class="infoCol" id="emailBusiness">Email: info@แแแแแ.com</p>
+                                    <p class="infoCol" id="taxNumBusiness">เลขประจำตัวผู้เสียภาษี: 1234556</p>
+                                </td>
+
+                                <td class="note">
+                                    <p id="num">เลขที่ vvvvvvvvvvvvvvv</p>
+                                    <p id="date">วันที่ หกหกหก</p>
+                                    <hr>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <p class="infoCol">ลูกค้า</p>
+                                    <p class="infoCol" id="addressCustomer">ccccccccccccccccc Co.,Itd
+                                        Sukhumvit Sukhumvit Road
+                                        Praong Tai, Praong,
+                                        Bangkok, Thailand 60
+                                    </p>
+                                    <p class="infoCol" id="taxNumCustomer">เลขประจำตัวผู้เสียภาษี:</p>
+                                </td>
+
+                                <td class="note">
+                                    <h2>** Note **</h2>
+                                    <p id="note">- ราคารวมค่าขนส่ง ณ ที่อยู่ตามใบเสนอราคา
+                                        - สีไม้สักธรรมชาติ</p>
+                                    <p id="thisInvoice">ใบเสนอราคานี้: dsdsds</p>
+                                    <hr style="
+              vertical-align: baseline;
+              width: auto;
+              border: none;
+              border-top: 1px solid black;
+              margin: 0;">
+                                </td>
+                            </tr>
+
+                            <tr class="details">
+                                <td colspan="2">
+                                    <hr style="
+              vertical-align: baseline;
+              width: auto;
+              border: none;
+              border-top: 1px solid black;
+              margin: 0;">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th class="id">#</th>
+                                                <th class="desc">รายการ</th>
+                                                <th class="qty">จำนวน</th>
+                                                <th class="per">หน่วย</th>
+                                                <th class="sub">ราคา/หน่วย</th>
+                                                <th class="tot">ยอดรวม</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="allProducts">
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr class="totals">
+                                <td class="tts">
+                                    <br>
+                                    <p id="totalInThai">
+                                    </p>
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr class="subtotal">
+                                            <td class="sub">รวมเป็นเงิน</td>
+                                            <td class="sub" id="total">0 บาท</td>
+                                        </tr>
+                                        <tr class="fees">
+                                            <td class="sub" id="discount">ส่วนลด %</td>
+                                            <td class="sub" id="discountAmount">0 บาท</td>
+                                        </tr>
+                                        <tr class="tax">
+                                            <td class="sub">รวมเป็นเงิน</td>
+                                            <td class="sub" id="totalNet">0 บาท</td>
+                                        </tr>
+                                        <tr></tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    ข้าพเจ้าได้ตรวจสอบรายละเอียดครบถ้วนแล้ว<br>
+                                    จึงขอยืนยันสั่งซื้อ/สั่งจ้าง งานตามใบเสนอราคานี้
+                                </td>
+                            </tr>
+                        </table>
+
+                        <section class="additional-info">
+                            <div class="row">
+                                <div class="columns">
+                                    <div class="txt">
+                                        <hr style="width: 80%; margin-left: 10;">
+                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</span><br>
+                                        <p>ผู้มีอำนาจ สั่งซื้อ/สั่งจ้าง<br>
+                                            ลงวันที่ ________</p>
+                                    </div>
+                                </div>
+                                <div class="columns">
+                                    <div class="txt">
+                                        <hr style="width: 80%; margin-right: 10;">
+                                        <p id="presenter">นาย. vvvvvvv<br>
+                                            ผู้เสนอราคา<br>
+                                        <p id="dateSign">กหกหก</p>
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+                <div class="row">
+                    <button type="button" class="printButt" onclick="printPage()" id="printButt">พิมพ์หน้านี้</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://rawgit.com/EldonMcGuinness/querystring.js/master/dist/querystring.min.js"></script>
+    <script>
+        document.getElementById('printButt').style = 'display: none';
+        const results = querystring(window.location.search);
+        let { num, date, addressBusiness, telBusiness, emailBusiness, taxNumBusiness, addressCustomer, taxNumCustomer, note, thisInvoice, nameProduct, amountProduct, unitProduct, priceProduct, discount, presenter } = results;
+
+        addressBusiness = addressBusiness.replaceAll('+', ' ')
+        addressCustomer = addressCustomer.replaceAll('+', ' ')
+        presenter = presenter.replaceAll('+', ' ')
+        note = note.replaceAll('-', '<br>-')
+
+        document.getElementById('addressBusiness').innerHTML = addressBusiness;
+        document.getElementById('telBusiness').innerHTML = 'โทรศัพท์: ' + telBusiness;
+        document.getElementById('emailBusiness').innerHTML = 'Email: ' + emailBusiness;
+        document.getElementById('taxNumBusiness').innerHTML = 'เลขประจำตัวผู้เสียภาษี: ' + taxNumBusiness;
+
+        document.getElementById('num').innerHTML = 'เลขที่ ' + num;
+        document.getElementById('date').innerHTML = 'วันที่ ' + date;
+
+        document.getElementById('addressCustomer').innerHTML = addressCustomer;
+        document.getElementById('taxNumCustomer').innerHTML = 'เลขประจำตัวผู้เสียภาษี: ' + taxNumCustomer;
+
+        document.getElementById('note').innerHTML = note;
+        document.getElementById('thisInvoice').innerHTML = 'ใบเสนอราคานี้: ' + thisInvoice;
+
+        let html = '';
+        let allTotal = 0;
+        getData();
+        // if (Array.isArray(nameProduct)) {
+        //     for (let i = 0; i < nameProduct.length; i++) {
+        //         const total = priceProduct[i] * amountProduct[i];
+        //         allTotal += total;
+        //         html += `
+        //         <tr class="item">
+        //             <td class="id num">${i + 1}</td>
+        //             <td class="desc">${nameProduct[i]}</td>
+        //             <td class="qty">${amountProduct[i]}</td>
+        //             <td class="per">${unitProduct[i]}</td>
+        //             <td class="sub">${priceProduct[i]}</td>
+        //             <td class="tot">${total}</td>
+        //         </tr>
+        //     `;
+        //     }
+        // } else {
+        //     const total = priceProduct * amountProduct;
+        //     allTotal += total;
+        //     html = `
+        //         <tr class="item">
+        //             <td class="id num">1</td>
+        //             <td class="desc">${nameProduct}</td>
+        //             <td class="qty">${amountProduct}</td>
+        //             <td class="per">${unitProduct}</td>
+        //             <td class="sub">${priceProduct}</td>
+        //             <td class="tot">${total}</td>
+        //         </tr>
+        //     `;
+        // }
+        document.getElementById('presenter').innerHTML = presenter;
+        document.getElementById('dateSign').innerHTML = date;
+
+        async function getData() {
+            const url = 'https://script.googleusercontent.com/macros/echo?user_content_key=s80ngn7jj0HJTkcNioMJzneAFRFZzN2C2GCVatQVN6p91Q3Ss9KokHVc6IQoSF1On6F1bKwHSLgCu9vmdUU8Vp1tryL01Sivm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnF287cpsU3rZAMEt19N4mdF9rHbn-JkyV0fMa1Q2IkrkdaKQULrGFFnkX7OpvJurLcsBCinZAgjmXCd38iVHNQfJ-cNJkhu4KNz9Jw9Md8uu&lib=MQ9v40zQe5cxq_jHQjlUBhdGJXg00Y1vj'
+            const response = await fetch(url);
+            let products = await response.json();
+
+            const url2 = 'https://script.googleusercontent.com/macros/echo?user_content_key=pYArAsCbpsqCtQyLYkQTvX_o6wdqtmppWyN7defoM6T8zQmSITNke1-dvXcAtwFk8z7ytocCXv20IpWU2SXaaHK0zDtlJ_UFm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnOrO_fMf5KF2Ms_kC--sNu6ngJzJnqttLM4nkT5Ki3Pz_9znWHSSWCwH2wk97rm16vRHM_7e24desN7dcFvc4sdion_Hr07p6w&lib=MhDxR0FoqUyqBnirO53q_yhwtdYaQ9ZEv'
+            const response2 = await fetch(url2);
+            let cart = await response2.json();
+            let carts = [];
+            for (const c of cart) {
+                if (carts.length == 0) {
+                    carts.push({
+                        'Name': c.Name,
+                        'Amount': c.Amount
+                    })
+                } else {
+                    let isFound = false;
+                    for (const cs of carts) {
+                        if (cs.Name == c.Name) {
+                            cs.Amount = parseInt(cs.Amount) + parseInt(c.Amount);
+                            isFound = true;
+                            break;
+                        }
+                    }
+                    if (!isFound) {
+                        carts.push({
+                            'Name': c.Name,
+                            'Amount': c.Amount
+                        })
+                    }
+                }
+            }
+
+            let html = '';
+            let num = 0;
+            let allTotal = 0;
+            for (const c of carts) {
+                num += 1;
+                let total = 0;
+                for (const p of products) {
+                    if (c.Name == p.Name) {
+                        total = p.Price * c.Amount;
+                        allTotal += total;
+                        html += `
+                            <tr>
+                                <td>${num}</td>
+                                <td>${c.Name}</td>
+                                <td>${c.Amount}</td>
+                                <td>${p.Unit}</td>
+                                <td>${p.Price}</td>
+                                <td>${total}</td>
+                            </tr>
+                        `;
+                        break;
+                    }
+                }
+            }
+            document.getElementById('allProducts').innerHTML = html;
+            const discountRate = discount / 100;
+            const discountPrice = allTotal * discountRate;
+            const totalNet = allTotal - discountPrice;
+            const str = totalNet.toString().split('.')
+            let allTotalStr = str[0];
+            let totalStr = '';
+            for (let i = 0; i < allTotalStr.length; i++) {
+                if (i == 2 && allTotalStr[i] == '1') {
+                    totalStr += 'สิบ'
+                } else {
+                    if (allTotalStr[i] == '1') {
+                        totalStr += 'หนึ่ง'
+                    }
+                    else if (allTotalStr[i] == '2') {
+                        totalStr += 'สอง'
+                    }
+                    else if (allTotalStr[i] == '3') {
+                        totalStr += 'สาม'
+                    }
+                    else if (allTotalStr[i] == '4') {
+                        totalStr += 'สี่'
+                    }
+                    else if (allTotalStr[i] == '5') {
+                        totalStr += 'ห้า'
+                    }
+                    else if (allTotalStr[i] == '6') {
+                        totalStr += 'หก'
+                    }
+                    else if (allTotalStr[i] == '7') {
+                        totalStr += 'เจ็ด'
+                    }
+                    else if (allTotalStr[i] == '8') {
+                        totalStr += 'แปด'
+                    }
+                    else if (allTotalStr[i] == '9') {
+                        totalStr += 'เก้า'
+                    }
+
+                    if (allTotalStr.length - (i) == 2) {
+                        totalStr += 'สิบ'
+                    }
+                    else if (allTotalStr.length - (i) == 3) {
+                        totalStr += 'ร้อย'
+                    }
+                    else if (allTotalStr.length - (i) == 4) {
+                        totalStr += 'พัน'
+                    }
+                    else if (allTotalStr.length - (i) == 5) {
+                        totalStr += 'หมื่น'
+                    }
+                    else if (allTotalStr.length - (i) == 6) {
+                        totalStr += 'แสน'
+                    }
+                    else if (allTotalStr.length - (i) == 7) {
+                        totalStr += 'ล้าน'
+                    }
+                }
+            }
+            totalStr += 'บาท'
+
+            if (str.length == 2) {
+                const dotStr = str[1];
+                totalStr += 'จุด'
+                for (let i = 0; i < dotStr.length; i++) {
+                    if (dotStr[i] == '1') {
+                        totalStr += 'หนึ่ง'
+                    }
+                    else if (dotStr[i] == '2') {
+                        totalStr += 'สอง'
+                    }
+                    else if (dotStr[i] == '3') {
+                        totalStr += 'สาม'
+                    }
+                    else if (dotStr[i] == '4') {
+                        totalStr += 'สี่'
+                    }
+                    else if (dotStr[i] == '5') {
+                        totalStr += 'ห้า'
+                    }
+                    else if (dotStr[i] == '6') {
+                        totalStr += 'หก'
+                    }
+                    else if (dotStr[i] == '7') {
+                        totalStr += 'เจ็ด'
+                    }
+                    else if (dotStr[i] == '8') {
+                        totalStr += 'แปด'
+                    }
+                    else if (dotStr[i] == '9') {
+                        totalStr += 'เก้า'
+                    }
+                }
+            }
+            totalStr += 'สตางค์'
+
+            document.getElementById('totalInThai').innerHTML = totalStr;
+            document.getElementById('total').innerHTML = allTotal;
+            document.getElementById('discount').innerHTML = 'ส่วนลด ' + discount + '%'
+            document.getElementById('discountAmount').innerHTML = discountPrice;
+            document.getElementById('totalNet').innerHTML = totalNet;
+            document.getElementById('printButt').style = 'display: block';
+
+            clearData();
+        }
+
+        async function clearData() {
+            const url = 'https://script.google.com/macros/s/AKfycbyEfLIoxOB3LIRuE-4_rwAuiEhlW-e-1YZ1_IhPED3bmX9MarSuQPAB4wRIXE4cQOcWng/exec';
+            const response = await fetch(
+                url, {
+                method: "POST",
+                body: '',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8',
+                }
+            }).then(response => {
+                console.log("success:", response);
+            }).catch(err => {
+                console.log("Error:" + err);
+            });
+        }
+
+        function printPage() {
+            let printContents = document.getElementById('invoice-container').innerHTML;
+            let originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+        }
+    </script>
+</body>
+
+</html>
